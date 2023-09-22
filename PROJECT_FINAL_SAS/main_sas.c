@@ -4,15 +4,16 @@
 struct task {
     char titre[100];
     char description[100];
-    int jour, month, year, id;
+    int jour, month, year, id,stat;
     char status [100];
 };
 int numId = 1; 
 int taskCount = 0;
 
+//________________________________________________________________________________________________________________________________________________________________________
 
 void add_tasks( struct task entre[]) {
-    
+
     entre[taskCount].id= numId;
     printf("Entre le titre de la tâche %d:\n",numId);
     scanf(" %[^\n]", entre[taskCount].titre);
@@ -20,13 +21,32 @@ void add_tasks( struct task entre[]) {
     scanf(" %[^\n]", entre[taskCount].description);
     printf("Entre la deadline de la tâche %d (JJ/MM/YYYY):\n", numId);
     scanf("%d/%d/%d", &entre[taskCount].jour, &entre[taskCount].month, &entre[taskCount].year);
+    do{
+    printf("Entre le status de la tâche :\n 1: à réaliser \n 2: en cours de réalisation \n 3: finalisée \n");
+    scanf(" %d",&entre[taskCount].stat);
     
-    strcpy(entre[taskCount].status, "à réaliser");
+     switch (entre[taskCount].stat)
+    {
+    case 1:
+        strcpy(entre[taskCount].status, "à réaliser");
+        break;
+    case 2:
+        strcpy(entre[taskCount].status, "en cours de réalisation");
+        break;
+    case 3:
+        strcpy(entre[taskCount].status, "finalisée");
+        break;
+    }
+    }while(entre[taskCount].stat<1 || entre[taskCount].stat>3);
+
     numId++;
     taskCount++;
     printf("\n");
 }
-   
+
+
+  //___________________________________________________________________________________________________________________________________________________________________________
+
 // Function to display tasks
 void output_tasks( struct task entre[]) {
     for (int i = 0; i < taskCount; i++) {
@@ -39,6 +59,9 @@ void output_tasks( struct task entre[]) {
 
 	}
 }
+
+//______________________________________________________________________________________________________________________________________________
+
 
 // Function to perform alphabetical sorting
 void alphabetical( struct task entre[]) {
@@ -68,20 +91,20 @@ int  menu_triage( struct task entre[] ){
 
                 int order_choose;
 		        printf(" 1 : Trier les tâches par ordre alphabétique.\n");
-                printf(" 2 : Trier les tâches par deadline.\n");
-                printf(" 3 : Afficher les tâches dont le deadline est dans 3 jours ou moins.\n");
+              /*  printf(" 2 : Trier les tâches par deadline.\n");
+                printf(" 3 : Afficher les tâches dont le deadline est dans 3 jours ou moins.\n"); */
                 scanf("%d", &order_choose);
                 switch (order_choose) {
                     case 1:
                         alphabetical( entre); // Sort the tasks alphabetically
                         output_tasks( entre); // Display the sorted tasks
                         break;
-                    case 2 :
+                /*    case 2 :
                         printf("par deadline");
                         break;
                     case 3 :
                         printf("3 jours");
-                        break;
+                        break; */
                     case 4 :
                         return 0;
                     default: printf("Choix non valide.\n");
@@ -114,6 +137,10 @@ void modifier_tasks(struct task entre[]){
 
 }
 
+
+//_______________________________________________________________________________________________________________________________________________
+
+
 void Rechercher_tasks_id(struct task entre[]){
     int target_id;
     printf("entre  id de tache:\n");
@@ -130,7 +157,7 @@ void Rechercher_tasks_id(struct task entre[]){
 
 }
 
-
+//__________________________________________________________________________________________________________________________________________________
 
 void Rechercher_tasks_titre(struct task entre[]){
     char target_titre[20];
@@ -149,6 +176,69 @@ void Rechercher_tasks_titre(struct task entre[]){
 
 
 }
+//_____________________________________________________________________________________________________________________________________________________________
+
+
+ void Rechercher (struct task entre[]){
+        int Rechercher;
+        do{
+         printf("1: Rechercher une tâche par son Identifiant.\n");
+         printf("2: Rechercher une tâche par son Identifiant.\n");
+         scanf("%d",&Rechercher);
+        switch (Rechercher)
+        {
+        case 1: Rechercher_tasks_id(entre);
+            break;
+        case 2: Rechercher_tasks_titre(entre);
+            break;
+        }
+        }while(Rechercher<1 || Rechercher>2);
+ }
+//______________________________________________________________________________________________________________________________________________
+int complètes=0;
+int  incomplètes=0;
+void LE_STATUS(struct task entre[]){
+    for(int i=0; i<taskCount; i++){
+        if (strcmp(entre[i].status,"à réaliser")==0)
+        {
+            complètes++;
+        }else if (strcmp(entre[i].status,"à réaliser")!=0)
+        {
+            incomplètes++;
+        }
+
+    }
+        printf("complet tasks count =  %d",complètes);
+        printf("incomplètes tasks count =  %d",incomplètes);
+
+}
+
+ void Statistiques(struct task entre[]){
+            int statis;
+            do{
+         printf("1: Afficher le nombre total des tâches.\n");
+         printf("2: Afficher le nombre de tâches complètes et incomplètes.\n");
+         printf("3: Afficher le nombre de jours restants jusqu'au délai de chaque tâche.\n");
+         scanf("%d",&statis);
+        switch (statis)
+        {
+        case 1: printf("%d",taskCount);
+            
+            break;
+        case 2: LE_STATUS(entre);
+            break;
+        
+        
+        }
+
+            }while(statis<1 || statis>3);
+ }
+//________________________________________________________________________________________________________________________________________________________________
+
+
+
+//___________________________________________________________________________________________________________________________________________
+
 
 
 
@@ -160,12 +250,11 @@ int main() {
     struct task entre[100]; // Define an array to store tasks
 
     while (1) {
-        printf("1: Ajouter plusieurs nouvelles tâches\n");
-        printf("2: Afficher la liste de toutes les tâches\n");
+        printf("1: Ajouter tasks\n");
+        printf("2: Afficher la liste des tasks\n");
         printf("3: Modifier tache\n");
-        printf("4: aficher le nombre des tasks\n");
-        printf("5: Rechercher un tasks ID\n");
-        printf("6: Rechercher un tasks TITRE\n");
+        printf("4: aficher les statistique\n");
+        printf("5: Rechercher un tasks \n");
         printf("7: Quitter le programme\n");
         scanf("%d", &choose);
 
@@ -183,12 +272,12 @@ int main() {
                 modifier_tasks(entre);
                 break;
             case 4:
-            printf("%d",taskCount);
+                Statistiques(entre);
+                break; 
+            case 5: Rechercher (entre);
                 break;
-            case 5: Rechercher_tasks_id(entre);
-                break;
-            case 6: Rechercher_tasks_titre(entre);
-	            break; 
+         /*   case 6: Rechercher_tasks_titre(entre);
+	            break; */
             case 7: 
 	             return 0;
             default: printf("Le choix n'existe pas.\n");
