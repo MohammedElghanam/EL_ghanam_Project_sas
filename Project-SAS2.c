@@ -44,18 +44,18 @@ void add_tasks()
         } while (jour < 1);
         do
         {
-            printf("##ENTRE LE STATUT DE LA TÂCHE :\n 1: À RÉALISER \n 2: EN COURS DE RÉALISATION \n 3: FINALISÉE \n");
+            printf("##ENTRE LE STATUT DE LA TÂCHE :\n 1: TO DO \n 2: DOWING \n 3: DONE \n");
             scanf(" %d", &entre[taskCount].stat);
             switch (entre[taskCount].stat)
             {
             case 1:
-                strcpy(entre[taskCount].status, "À RÉALISER");
+                strcpy(entre[taskCount].status, "TO DO");
                 break;
             case 2:
-                strcpy(entre[taskCount].status, "EN COURS DE RÉALISATIONON");
+                strcpy(entre[taskCount].status, "DOWING");
                 break;
             case 3:
-                strcpy(entre[taskCount].status, "FINALISÉE");
+                strcpy(entre[taskCount].status, "DONE");
                 break;
             }
         } while (entre[taskCount].stat < 1 || entre[taskCount].stat > 3);
@@ -186,7 +186,7 @@ void modifier_tasks()
         {
             printf("Entre la description de la tâche :\n");
             scanf(" %[^\n]", entre[i].description);
-            printf("Entre la deadline de la tâche %d (en jour):\n", numId);
+            printf("Entre la deadline de la tâche (en jour):\n");
             scanf("%d", &jour);
             long long seconds = (long long)jour * 86400; 
             time_t nowTime;
@@ -194,8 +194,22 @@ void modifier_tasks()
             seconds += nowTime;
             
             entre[i].time = seconds;
-            printf("Entre la status de la tâche :\n: 1: À RÉALISER \n 2: EN COURS DE RÉALISATION \n 3: FINALISÉE \n");
-            scanf(" %[^\n]", entre[i].status);
+            do{
+            printf("Entre la status de la tâche :\n 1: TO DO \n 2: DOIND \n 3: DONE \n");
+            scanf(" %d",&entre[taskCount].stat);
+            switch (entre[taskCount].stat)
+            {
+            case 1:
+                strcpy(entre[taskCount].status, "TO DO");
+                break;
+            case 2:
+                strcpy(entre[taskCount].status, "DOWING");
+                break;
+            case 3:
+                strcpy(entre[taskCount].status, "DONE");
+                break;
+            }
+            } while (entre[taskCount].stat < 1 || entre[taskCount].stat > 3);
            
         }
     }
@@ -267,7 +281,7 @@ void LE_STATUS()
 {
     for (int i = 0; i < taskCount; i++)
     {
-        if (strcmp(entre[i].status, "FINALISÉE") == 0 )
+        if (strcmp(entre[i].status, "DONE") == 0 )
         {
             complètes++;
         }
