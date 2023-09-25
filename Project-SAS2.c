@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-
+// Structure pour représenter une tâche
 struct task
 {
     char titre[100];
@@ -9,11 +9,13 @@ struct task
     int time, id, stat;
     char status[100];
 };
+// Variables globales
 int numId = 1;
 int taskCount = 0;
 int complètes = 0;
 int incomplètes = 0;
-struct task entre[5];
+struct task entre[100];
+// Fonction pour ajouter des tâches
 //______________________________________________________________________________________________________________________________________
 void add_tasks()
 {
@@ -34,11 +36,10 @@ void add_tasks()
 
             printf("##ENTRE LA DEADLINE DE LA TÂCHE %d (EN JOURS) : ",numId);
             scanf("%d", &jour);
-            long long seconds = (long long)jour * 86400; // 86400 secs in 1 day
+            long long seconds = (long long)jour * 86400;
             time_t nowTime;
             time(&nowTime);
             seconds += nowTime;
-            // store task time
             entre[i].time = seconds;
         } while (jour < 1);
         do
@@ -51,7 +52,7 @@ void add_tasks()
                 strcpy(entre[taskCount].status, "À RÉALISER");
                 break;
             case 2:
-                strcpy(entre[taskCount].status, "EN COURS DE RÉALISATIONon");
+                strcpy(entre[taskCount].status, "EN COURS DE RÉALISATIONON");
                 break;
             case 3:
                 strcpy(entre[taskCount].status, "FINALISÉE");
@@ -63,12 +64,13 @@ void add_tasks()
         printf("\n");
     }
 }
+// Fonction pour afficher les tâches
 //______________________________________________________________________________________________________________________________________
 void output_tasks()
 {
     for (int i = 0; i < taskCount; i++)
     {
-        // entre[i].id = numId ;
+        
         printf("-->  LE ID DE LA TÂCHE %d EST : %d\n", i + 1, entre[i].id);
         printf("--> Le titre de la tâche %d est : %s\n", i + 1, entre[i].titre);
         printf("--> Description de la tâche %d : %s\n", i + 1, entre[i].description);
@@ -77,6 +79,7 @@ void output_tasks()
         printf("--> Statut de la tâche : %s \n\n", entre[i].status);
     }
 }
+// Fonction pour trier les tâches par ordre alphabétique
 //______________________________________________________________________________________________________________________________________
 void alphabetical()
 {
@@ -95,6 +98,7 @@ void alphabetical()
         }
     }
 }
+// Fonction pour trier les tâches par deadline
 //______________________________________________________________________________________________________________________________________
 void deadline_tri()
 {
@@ -113,6 +117,7 @@ void deadline_tri()
         }
     }
 }
+// Fonction pour afficher les tâches dont le deadline est dans 3 jours ou moins
 //______________________________________________________________________________________________________________________________________
 void jour_3_tri()
 {
@@ -136,6 +141,7 @@ for (int i = 0 ; i < taskCount ; i++)
 
 
 }
+// Fonction pour le menu de triage
 //______________________________________________________________________________________________________________________________________
 int menu_triage()
 {
@@ -149,8 +155,8 @@ int menu_triage()
     switch (order_choose)
     {
     case 1:
-        alphabetical(entre); // Sort the tasks alphabetically
-        output_tasks(entre); // Display the sorted tasks
+        alphabetical(entre); 
+        output_tasks(entre); 
         break;
     case 2:
         deadline_tri(entre);
@@ -158,7 +164,6 @@ int menu_triage()
         break;
     case 3:
         jour_3_tri(entre);
-        
         break;
     case 4:
         return 0;
@@ -167,13 +172,15 @@ int menu_triage()
         break;
     }
 }
+// Fonction pour modifier une tâche
 //______________________________________________________________________________________________________________________________________
 void modifier_tasks()
 {
-    int target_id, exist = 0, jour;
+    int i;
+    int target_id, jour;
     printf("entre  id de tache:\n");
     scanf("%d", &target_id);
-    for (int i = 0; i < taskCount; i++)
+    for ( i = 0; i < taskCount; i++)
     {
         if (entre[i].id == target_id)
         {
@@ -181,51 +188,48 @@ void modifier_tasks()
             scanf(" %[^\n]", entre[i].description);
             printf("Entre la deadline de la tâche %d (en jour):\n", numId);
             scanf("%d", &jour);
-            long long seconds = (long long)jour * 86400; // 86400 secs in 1 day
-
+            long long seconds = (long long)jour * 86400; 
             time_t nowTime;
-
             time(&nowTime);
-
             seconds += nowTime;
-
-            // store task time
+            
             entre[i].time = seconds;
-            printf("Entre la status de la tâche :\n");
+            printf("Entre la status de la tâche :\n: 1: À RÉALISER \n 2: EN COURS DE RÉALISATION \n 3: FINALISÉE \n");
             scanf(" %[^\n]", entre[i].status);
-            exist = 1;
-            break;
+           
         }
     }
-    if (!exist)
-    {
-        printf("le ID %d ne pa6666666s exist\n", target_id);
+     if(target_id != entre[i].id){
+        printf("la tache ne pas exist\n");
     }
+    
 }
+// Fonction pour rechercher une tâche par son ID
 //______________________________________________________________________________________________________________________________________
 void Rechercher_tasks_id()
 {
-    int target_id, found = 0;
+    int i;
+    int target_id ;
     printf("entre  id de tache:\n");
     scanf("%d", &target_id);
-    for (int i = 0; i < taskCount; i++)
+    for (i = 0; i < taskCount; i++)
     {
         if (target_id == entre[i].id)
         {
             printf("la position de tache est :%d \n", i);
-            found = 1;
-            break;
+           
         }
     }
-    if (!found)
-    {
-        printf(" le ID %d ne pasoooooooo exist \n", target_id);
+    if(target_id != entre[i].id){
+        printf("la tache ne pas exist\n");
     }
+  
 }
+// Fonction pour rechercher une tâche par son TITRE
 //______________________________________________________________________________________________________________________________________
 void Rechercher_tasks_titre()
 {
-    char target_titre[20], found = 0;
+    char target_titre[20];
     printf("entre  le titre de tache:\n");
     scanf(" %[^\n]", target_titre);
     for (int i = 0; i < taskCount; i++)
@@ -236,6 +240,7 @@ void Rechercher_tasks_titre()
         }
     }
 }
+// Fonction pour le menu de recherche
 //______________________________________________________________________________________________________________________________________
 void Rechercher()
 {
@@ -256,10 +261,10 @@ void Rechercher()
         }
     } while (Rechercher < 1 || Rechercher > 2);
 }
+// Fonction pour compter le nombre de tâches complètes et incomplètes
 //______________________________________________________________________________________________________________________________________
 void LE_STATUS()
 {
-    // == 0 || strcmp(entre[i].status, "EN COURS DE RÉALISATIONon") == 0
     for (int i = 0; i < taskCount; i++)
     {
         if (strcmp(entre[i].status, "FINALISÉE") == 0 )
@@ -274,6 +279,7 @@ void LE_STATUS()
     printf("\ncomplet tasks count =  %d", complètes);
     printf("\nincomplètes tasks count =  %d\n", incomplètes);
 }
+// Fonction pour afficher le délai restant jusqu'à la deadline d'une tâche
 //______________________________________________________________________________________________________________________________________
 void deadline()
 {
@@ -289,14 +295,11 @@ void deadline()
         if (entre[i].id == dead_id)
         {
             time_t solution_Time = entre[i].time - time(NULL);
-
-            /*    printf("remaining time in seconds= %lld \n", (long long)solution_Time);
-                printf("remaining time in minuts = %lld\n", (long long)(solution_Time / 60)); // 60 s in 1 min
-                printf("remaining time in Hrs = %lld\n", (long long)(solution_Time / 3600));  // 3600 second in an hour */
-            printf("le time in days: %lld\n", (long long)(solution_Time / 86400)); // 86400 second in a day
+            printf("le time in days: %lld\n", (long long)(solution_Time / 86400)); 
         }
     }
 }
+// Fonction pour afficher des statistiques
 //______________________________________________________________________________________________________________________________________
 void Statistiques()
 {
@@ -314,15 +317,16 @@ void Statistiques()
 
             break;
         case 2:
-            LE_STATUS(entre);
+            LE_STATUS();
             break;
         case 3:
-            deadline(entre);
+            deadline();
             break;
         }
 
     } while (statis < 1 || statis > 3);
 }
+// Fonction pour supprimer une tâche
 //______________________________________________________________________________________________________________________________________
 void Supprimer()
 {
@@ -338,16 +342,15 @@ void Supprimer()
                 entre[j] = entre[j + 1];
             }
             taskCount--;
-            printf("TACHE SUPPRIMEE AVEC SUCES .\n");
+            printf("TACHE SUPPRIMEE AVEC SUCCES .\n");
         }
     }
 }
+// Fonction principale
 //______________________________________________________________________________________________________________________________________
 int main()
 {
     int choose, order_choose, nombre_tasks, d;
-    // struct task entre[100]; 
-
     while (1)
     {
         printf("1: Ajouter tasks\n");
@@ -362,7 +365,6 @@ int main()
         switch (choose)
         {
         case 1:
-
             add_tasks(); 
             break;
         case 2:
